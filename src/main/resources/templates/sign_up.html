@@ -11,7 +11,7 @@
 <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
 <form th:action="@{/sign_up}" method="post" class="m-auto col-3 text-center">
     <div th:object="${user}" >
-        <h1 class="h3 mb-3 fw-normal">Пожалуйста зарегистрируйтесь!</h1>
+        <h1 class="h3 mb-3 fw-normal">Пожалуйста, зарегистрируйтесь!</h1>
 
         <div class="mt-1 mb-1 text-muted" th:if="${param.error}">Неверно заполнены поля.</div>
         <div class="mt-1 mb-1 text-muted" th:if="${param.logout}">You have been logged out.</div>

@@ -15,7 +15,7 @@
 
         <h5 th:text="'Установленный электронный адрес: '+${currentEmail}"></h5>
         <div class="form-floating">
-            <input type="text" th:class="'form-control'+(${emailInputError!=null}?' is-invalid':'')"
+            <input type="email" th:class="'form-control'+(${emailInputError!=null}?' is-invalid':'')"
                    th:value="${currentEmail}" maxlength="50"  minlength="8" id="emailInputError" name="email" placeholder="Новый электронный адрес" required>
             <label for="emailInputError" th:text="${emailInputError==null}?'Новый электронный адрес':${emailInputError}"></label>
         </div>
