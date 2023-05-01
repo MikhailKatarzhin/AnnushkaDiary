@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+    <div th:fragment="navbar">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">Домашняя страница</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Профиль
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown" sec:authorize="isAuthenticated()">
+                                <li><form th:action="@{/profile}">
+                                    <button type="submit" class="dropdown-item"
+                                            th:text="'Дневник пользователя '+${#httpServletRequest.remoteUser}">
+                                    </button></form></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><form th:action="@{/logout}" th:method="post">
+                                    <button type="submit" class="dropdown-item">Выйти</button>
+                                </form></li>
+                            </ul>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown" sec:authorize="isAnonymous()">
+                                <li><form th:action="@{/sign_in}">
+                                    <button type="submit" class="dropdown-item">Авторизоваться</button>
+                                </form></li>
+                                <li><form th:action="@{/sign_up}">
+                                    <button type="submit" class="dropdown-item">Зарегистрироваться</button>
+                                </form></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown" sec:authorize="hasAuthority('АДМИНИСТРАТОР')">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Администрирование
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                <li><form th:action="@{/administration/users}">
+                                    <button type="submit" class="dropdown-item">Перечень пользователей</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/phrase}">
+                                    <button type="submit" class="dropdown-item">Перечень фраз</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/phrase/add}">
+                                    <button type="submit" class="dropdown-item">Добавить фразу</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/test}">
+                                    <button type="submit" class="dropdown-item">Перечень тестов</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/test/add}">
+                                    <button type="submit" class="dropdown-item">Добавить тест</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/task}">
+                                    <button type="submit" class="dropdown-item">Перечень задач</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/task/add}">
+                                    <button type="submit" class="dropdown-item">Добавить задачу</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/answer}">
+                                    <button type="submit" class="dropdown-item">Перечень ответов</button>
+                                </form></li>
+                                <li><form th:action="@{/administration/answer/add}">
+                                    <button type="submit" class="dropdown-item">Добавить ответ</button>
+                                </form></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown" sec:authorize="hasAuthority('ПОЛЬЗОВАТЕЛЬ')">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Тесты-опросники
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                <li><form th:action="@{/consumer/tests}">
+                                    <button type="submit" class="dropdown-item">Тест-опросники</button>
+                                </form></li>
+                                <li><form th:action="@{/consumer/trenings}">
+                                    <button type="submit" class="dropdown-item">Тренинги</button>
+                                </form></li>
+                                <li><form th:action="@{/consumer/results}">
+                                    <button type="submit" class="dropdown-item">Ваши результаты</button>
+                                </form></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>
