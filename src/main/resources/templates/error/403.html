@@ -12,6 +12,11 @@
     <h1>You do not have the authority to perform this action!</h1>
     <p>There are nothing to show for you:(</p>
 </div>
+<footer class="footer mt-auto py-3 bg-body-tertiary" th:if="${footerString}">
+    <div class="container" >
+        <span class="text-body-secondary" th:text="${footerString}"></span>
+    </div>
+</footer>
 <script type="text/javascript"
         src="/webjars/jquery/3.6.0/jquery.min.js"></script>
 

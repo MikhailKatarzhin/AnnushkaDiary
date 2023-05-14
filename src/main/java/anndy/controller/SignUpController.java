@@ -1,6 +1,8 @@
 package anndy.controller;
 
+import anndy.model.Phrase;
 import anndy.model.User;
+import anndy.service.interfaces.PhraseService;
 import anndy.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,14 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class SignUpController {
 
     private final UserService userService;
+    private final PhraseService phraseService;
 
     @Autowired
-    public SignUpController(UserService userService) {
+    public SignUpController(UserService userService, PhraseService phraseService) {
         this.userService = userService;
+        this.phraseService = phraseService;
     }
 
     @GetMapping
     public String signUp(ModelMap model) {
+        insertRandomPhraseIntoFooterString(model);
         if (userService.getRemoteUser() != null)
             return "redirect:/profile";
         model.addAttribute("user", new User());
@@ -30,7 +35,7 @@ public class SignUpController {
     @Transactional
     @PostMapping
     public String addUser(@RequestParam String confirmPassword, User user, ModelMap model) {
-
+        insertRandomPhraseIntoFooterString(model);
         model = checkRegistrationData(confirmPassword, user, model);
         if (model.size() > 4) {
             return "sign_up";
@@ -43,7 +48,6 @@ public class SignUpController {
         if (userService.getByName(user.getName()) != null || !user.getName().matches("[A-Za-z0-9 А-Яа-яЁё_-]{2,50}")) {
             model.addAttribute("usernameExistsError", "Username input error");
         }
-
         if (user.getPassword().isBlank() || !user.getPassword().matches("[A-Za-z0-9#$&/%-._]{8,60}$")) {
             model.addAttribute("passwordIsBlankError", "Password input error!");
         }
@@ -55,5 +59,11 @@ public class SignUpController {
             model.addAttribute("emailExistsError", "Email input error");
         }
         return model;
+    }
+
+    private void insertRandomPhraseIntoFooterString(ModelMap modelMap){
+        Phrase phrase = phraseService.findRandomPhrase();
+        if (phrase != null)
+            modelMap.addAttribute("footerString", phrase.getContent());
     }
 }

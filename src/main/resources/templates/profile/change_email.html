@@ -23,6 +23,11 @@
         <button class="w-100 btn btn-lg btn-dark" type="submit">Подтвердить изменение</button>
     </form>
 </div>
+<footer class="footer mt-auto py-3 bg-body-tertiary" th:if="${footerString}">
+    <div class="container" >
+        <span class="text-body-secondary" th:text="${footerString}"></span>
+    </div>
+</footer>
 <script type="text/javascript"
         src="/webjars/jquery/3.6.0/jquery.min.js"></script>
 

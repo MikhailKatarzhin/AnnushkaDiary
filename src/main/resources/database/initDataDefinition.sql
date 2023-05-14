@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS "User_Test" (
    user_id bigint NOT NULL,
    test_id bigint NOT NULL,
    date timestamp NOT NULL DEFAULT now(),
-   CONSTRAINT "PK_User_Test" PRIMARY KEY (user_id, test_id),
+   CONSTRAINT "PK_User_Test" PRIMARY KEY (user_id, test_id, date),
    CONSTRAINT "FK_Test_was_solved_by_User" FOREIGN KEY (user_id)
        REFERENCES "User" (id) MATCH SIMPLE
        ON DELETE NO ACTION
