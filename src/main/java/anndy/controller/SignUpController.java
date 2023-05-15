@@ -10,20 +10,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/sign_up")
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class SignUpController {
 
     private final UserService userService;
     private final PhraseService phraseService;
+    private final HttpServletRequest httpServletRequest;
 
     @Autowired
-    public SignUpController(UserService userService, PhraseService phraseService) {
+    public SignUpController(UserService userService, PhraseService phraseService, HttpServletRequest httpServletRequest) {
         this.userService = userService;
         this.phraseService = phraseService;
+        this.httpServletRequest = httpServletRequest;
     }
 
-    @GetMapping
+    @GetMapping("/sign_up")
     public String signUp(ModelMap model) {
         insertRandomPhraseIntoFooterString(model);
         if (userService.getRemoteUser() != null)
@@ -33,7 +36,7 @@ public class SignUpController {
     }
 
     @Transactional
-    @PostMapping
+    @PostMapping("/sign_up")
     public String addUser(@RequestParam String confirmPassword, User user, ModelMap model) {
         insertRandomPhraseIntoFooterString(model);
         model = checkRegistrationData(confirmPassword, user, model);
@@ -65,5 +68,13 @@ public class SignUpController {
         Phrase phrase = phraseService.findRandomPhrase();
         if (phrase != null)
             modelMap.addAttribute("footerString", phrase.getContent());
+    }
+
+    @GetMapping("/sign_in")
+    public String signIn(ModelMap model){
+        if (httpServletRequest.getRemoteUser() != null)
+            return "redirect:/profile";
+        insertRandomPhraseIntoFooterString(model);
+        return "sign_in";
     }
 }

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.sql.Date;
 
 @Entity
 @Getter
@@ -25,5 +25,5 @@ public class Day_Mark {
     private User user;
 
     @Column(name = "date")
-    private Instant date;
+    private Date date;
 }

@@ -8,7 +8,7 @@ ON CONFLICT (id)
 INSERT INTO
     "User" (id, email, name, hash_password)
 VALUES
-    (0, 'admin@mail.ru', 'admin', '$2a$10$YD/o4ka8TPfc2OYha2A3Bu2xUTJMyFHVYWR5Sl96YyrzNFD89W7Fe')
+    (0, 'admin@mail.ru', 'admin', '$2a$10$Gx5MidAbeq4fO0V2IKdbVOqoTPWlaqM9DevsGzys/BeGL5SHP36FO')
 ON CONFLICT (id)
     DO NOTHING;
 

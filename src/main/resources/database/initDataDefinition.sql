@@ -56,6 +56,17 @@ CREATE TABLE IF NOT EXISTS "Test" (
 );
 
 -- -----------------------------------------------------
+-- Table `psychodiary`.`Training`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS "Training" (
+    id BIGSERIAL NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    description VARCHAR(5000) NOT NULL,
+    CONSTRAINT "PK_Training_Id" PRIMARY KEY (id),
+    CONSTRAINT "UQ_Training_Title" UNIQUE (title)
+);
+
+-- -----------------------------------------------------
 -- Table `psychodiary`.`Task`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS "Task" (
@@ -66,9 +77,28 @@ CREATE TABLE IF NOT EXISTS "Task" (
 );
 
 -- -----------------------------------------------------
+-- Table `psychodiary`.`Training_Task`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS "Training_Task"
+(
+    training_id bigint NOT NULL,
+    task_id bigint NOT NULL,
+    CONSTRAINT "PK_Training_Task" PRIMARY KEY (training_id, task_id),
+    CONSTRAINT "FK_Training_has_Task" FOREIGN KEY (task_id)
+        REFERENCES "Task" (id) MATCH SIMPLE
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE,
+    CONSTRAINT "FK_Task_occupies_Training" FOREIGN KEY (training_id)
+        REFERENCES "Training" (id) MATCH SIMPLE
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
 -- Table `psychodiary`.`Test_Task`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS "Test_Task" (
+CREATE TABLE IF NOT EXISTS "Test_Task"
+(
     test_id bigint NOT NULL,
     task_id bigint NOT NULL,
     CONSTRAINT "PK_Test_Task" PRIMARY KEY (test_id, task_id),
@@ -128,45 +158,119 @@ CREATE TABLE IF NOT EXISTS "Task_Correct_Answer" (
 );
 
 -- -----------------------------------------------------
--- Table `psychodiary`.`User_Test`
+-- Table `psychodiary`.`Training_try`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS "User_Test" (
+CREATE TABLE IF NOT EXISTS "Training_try" (
    user_id bigint NOT NULL,
-   test_id bigint NOT NULL,
-   date timestamp NOT NULL DEFAULT now(),
-   CONSTRAINT "PK_User_Test" PRIMARY KEY (user_id, test_id, date),
-   CONSTRAINT "FK_Test_was_solved_by_User" FOREIGN KEY (user_id)
+   training_id bigint NOT NULL,
+   start_date date NOT NULL DEFAULT now(),
+   finished boolean NOT NULL DEFAULT false,
+   CONSTRAINT "PK_Training_try" PRIMARY KEY (user_id, training_id, start_date),
+   CONSTRAINT "FK_Training_was_solved_by_User" FOREIGN KEY (user_id)
        REFERENCES "User" (id) MATCH SIMPLE
        ON DELETE NO ACTION
        ON UPDATE CASCADE,
-   CONSTRAINT "FK_User_solved_Test" FOREIGN KEY (test_id)
-       REFERENCES "Test" (id) MATCH SIMPLE
+   CONSTRAINT "FK_User_trying_Training" FOREIGN KEY (training_id)
+       REFERENCES "Training" (id) MATCH SIMPLE
        ON DELETE NO ACTION
        ON UPDATE CASCADE,
-   CONSTRAINT "CH_Test_starting_at_date" CHECK ("User_Test".date <= now())
+   CONSTRAINT "CH_Training_started_at_date" CHECK ("Training_try".start_date <= now())
 );
 
 -- -----------------------------------------------------
--- Table `psychodiary`.`User_Answer`
+-- Table `psychodiary`.`Test_try`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS "User_Answer" (
+CREATE TABLE IF NOT EXISTS "Test_try" (
+    user_id bigint NOT NULL,
+    test_id bigint NOT NULL,
+    start_date date NOT NULL DEFAULT now(),
+    finished boolean NOT NULL DEFAULT false,
+    CONSTRAINT "PK_Test_try" PRIMARY KEY (user_id, test_id, start_date),
+    CONSTRAINT "FK_Test_was_solved_by_User" FOREIGN KEY (user_id)
+    REFERENCES "User" (id) MATCH SIMPLE
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+    CONSTRAINT "FK_User_trying_Test" FOREIGN KEY (test_id)
+    REFERENCES "Test" (id) MATCH SIMPLE
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+    CONSTRAINT "CH_Test_started_at_date" CHECK ("Test_try".start_date <= now())
+);
+
+-- -----------------------------------------------------
+-- Table `psychodiary`.`Training_Answer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS "Training_Answer"
+(
      user_id bigint NOT NULL,
-     test_id bigint NOT NULL,
+     training_id bigint NOT NULL,
+     start_date date NOT NULL,
      task_id bigint NOT NULL,
      answer_id bigint NOT NULL,
-     CONSTRAINT "PK_User_Answer" PRIMARY KEY (user_id, test_id, task_id, answer_id),
-     CONSTRAINT "FK_User_Answer_occupies_User_Test" FOREIGN KEY (user_id, test_id)
-         REFERENCES "User_Test" (user_id, test_id) MATCH SIMPLE
+     CONSTRAINT "PK_Training_Answer" PRIMARY KEY (user_id, training_id, start_date, task_id, answer_id),
+     CONSTRAINT "FK_Training_Answer_occupies_Training_try" FOREIGN KEY (user_id, training_id, start_date)
+         REFERENCES "Training_try" (user_id, training_id, start_date) MATCH SIMPLE
          ON DELETE NO ACTION
          ON UPDATE CASCADE,
-     CONSTRAINT "FK_User_Test_has_Answer" FOREIGN KEY (answer_id)
-         REFERENCES "Answer" (id) MATCH SIMPLE
-         ON DELETE NO ACTION
-         ON UPDATE CASCADE,
-     CONSTRAINT "FK_Answer_occupies_Task" FOREIGN KEY (task_id)
-         REFERENCES "Task" (id) MATCH SIMPLE
+     CONSTRAINT "FK_Training_try_has_Task_Answer" FOREIGN KEY (answer_id, task_id)
+         REFERENCES "Task_Answer" (answer_id, task_id) MATCH SIMPLE
          ON DELETE NO ACTION
          ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table `psychodiary`.`Test_Answer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS "Test_Answer"
+(
+    user_id bigint NOT NULL,
+    test_id bigint NOT NULL,
+    start_date date NOT NULL,
+    task_id bigint NOT NULL,
+    answer_id bigint NOT NULL,
+    CONSTRAINT "PK_Test_Answer" PRIMARY KEY (user_id, test_id, start_date, task_id, answer_id),
+    CONSTRAINT "FK_Test_Answer_occupies_Training_try" FOREIGN KEY (user_id, test_id, start_date)
+        REFERENCES "Test_try" (user_id, test_id, start_date) MATCH SIMPLE
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE,
+    CONSTRAINT "FK_Test_try_has_Task_Answer" FOREIGN KEY (answer_id, task_id)
+        REFERENCES "Task_Answer" (answer_id, task_id)  MATCH SIMPLE
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table `psychodiary`.`Report`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS "Report" (
+    id BIGSERIAL NOT NULL,
+    test_id BIGINT NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    description VARCHAR(5000) NOT NULL,
+    CONSTRAINT "PK_Report_Id" PRIMARY KEY (id),
+    CONSTRAINT "UQ_Report_Title" UNIQUE (title),
+    CONSTRAINT "FK_Report_summary_Test" FOREIGN KEY (test_id)
+        REFERENCES "Test" (id)
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table `psychodiary`.`Report_Task_Answer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS "Report_Task_Answer" (
+    report_id BIGINT NOT NULL,
+    task_id BIGINT NOT NULL,
+    answer_id BIGINT NOT NULL,
+    CONSTRAINT "PK_Report_Task_Answer" PRIMARY KEY (report_id, task_id, answer_id),
+    CONSTRAINT "FK_Report_has_Task_Answer" FOREIGN KEY (answer_id, task_id)
+        REFERENCES "Task_Answer" (answer_id, task_id)
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE,
+    CONSTRAINT "FK_Task_Answer_occupies_Report" FOREIGN KEY (report_id)
+        REFERENCES "Report" (id)
+        ON DELETE NO ACTION
+        ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
@@ -188,7 +292,7 @@ CREATE TABLE IF NOT EXISTS "Diary" (
 CREATE TABLE IF NOT EXISTS "Page" (
     id BIGSERIAL NOT NULL,
     diary_id bigint NOT NULL,
-    date timestamp NOT NULL DEFAULT now(),
+    date date NOT NULL DEFAULT now(),
     content VARCHAR(10000) NOT NULL,
     CONSTRAINT "PK_Page_id" PRIMARY KEY (id),
     CONSTRAINT "FK_Page_occupies_Diary" FOREIGN KEY (diary_id)
@@ -220,7 +324,7 @@ CREATE TABLE IF NOT EXISTS "Image" (
 CREATE TABLE IF NOT EXISTS "Day_mark" (
     id BIGSERIAL NOT NULL,
     user_id bigint NOT NULL,
-    date timestamp NOT NULL DEFAULT now(),
+    date date NOT NULL DEFAULT now(),
     mark bigint NOT NULL DEFAULT 0,
     CONSTRAINT "PK_Mark_id" PRIMARY KEY (id),
     CONSTRAINT "FK_Mark_belongs_User" FOREIGN KEY (user_id)
