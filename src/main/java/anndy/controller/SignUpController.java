@@ -32,7 +32,7 @@ public class SignUpController {
         if (userService.getRemoteUser() != null)
             return "redirect:/profile";
         model.addAttribute("user", new User());
-        return "sign_up";
+        return "auth/sign_up";
     }
 
     @Transactional
@@ -41,7 +41,7 @@ public class SignUpController {
         insertRandomPhraseIntoFooterString(model);
         model = checkRegistrationData(confirmPassword, user, model);
         if (model.size() > 4) {
-            return "sign_up";
+            return "auth/sign_up";
         }
         userService.signUpUser(user);
         return "redirect:/sign_in";
@@ -70,11 +70,12 @@ public class SignUpController {
             modelMap.addAttribute("footerString", phrase.getContent());
     }
 
+
     @GetMapping("/sign_in")
     public String signIn(ModelMap model){
         if (httpServletRequest.getRemoteUser() != null)
             return "redirect:/profile";
         insertRandomPhraseIntoFooterString(model);
-        return "sign_in";
+        return "auth/sign_in";
     }
 }
