@@ -1,8 +1,8 @@
-package anndy.service.interfaces;
+package anndy.phrase;
 
 import anndy.model.Phrase;
 
-public interface PhraseService {
+public interface IPhraseService {
     Phrase findById(long id);
 
     Phrase findRandomPhrase();

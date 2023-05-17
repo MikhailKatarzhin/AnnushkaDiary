@@ -1,8 +1,7 @@
 package anndy.controller;
 
-import anndy.model.Phrase;
 import anndy.model.User;
-import anndy.service.interfaces.PhraseService;
+import anndy.phrase.IPhraseService;
 import anndy.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class ProfilesController {
     private final UserService userService;
-    private final PhraseService phraseService;
+    private final IPhraseService phraseService;
 
     @Autowired
-    public ProfilesController(UserService userService, PhraseService phraseService) {
+    public ProfilesController(UserService userService, IPhraseService phraseService) {
         this.userService = userService;
         this.phraseService = phraseService;
     }
@@ -27,16 +26,10 @@ public class ProfilesController {
         Long userId = userService.getRemoteUserId();
         return "redirect:/profile/" + userId;
     }
-    @PostMapping
-    public String myProfileP() {
-        Long userId = userService.getRemoteUserId();
-        return "redirect:/profile/" + userId;
-    }
 
     @GetMapping("/{id}")
     @PreAuthorize("(@userService.getRemoteUser().getId() == #id) or hasAuthority('АДМИНИСТРАТОР')")
     public String viewProfileById(@PathVariable Long id, ModelMap model) {
-        insertRandomPhraseIntoFooterString(model);
         User user = userService.getById(id);
         if (user == null)
             return myProfile();
@@ -46,14 +39,12 @@ public class ProfilesController {
 
     @GetMapping("/change_email")
     public String changeEmail(ModelMap model) {
-        insertRandomPhraseIntoFooterString(model);
         model.addAttribute("currentEmail", userService.getRemoteUserEmail());
         return "profile/change_email";
     }
 
     @PostMapping("/change_email")
     public String changeEmail(@RequestParam("email") String email, ModelMap model) {
-        insertRandomPhraseIntoFooterString(model);
         if (userService.emailExists(email)
                 || !email.matches("[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")) {
             model.addAttribute("currentEmail", userService.getRemoteUserEmail());
@@ -69,8 +60,7 @@ public class ProfilesController {
     }
 
     @GetMapping("/change_password")
-    public String changePassword(ModelMap model) {
-        insertRandomPhraseIntoFooterString(model);
+    public String changePassword() {
         return "profile/change_password";
     }
 
@@ -81,7 +71,6 @@ public class ProfilesController {
             , @RequestParam("confirmPassword") String confirmPassword
             , ModelMap model
     ) {
-        insertRandomPhraseIntoFooterString(model);
         if (!userService.checkRemoteUserPassword(currentPassword)) {
             model.addAttribute("InvalidPasswordError", "Установленный пароль неверено введен");
             return "profile/change_password";
@@ -97,11 +86,5 @@ public class ProfilesController {
         }
         userService.savePassword(newPassword);
         return "redirect:/profile";
-    }
-
-    private void insertRandomPhraseIntoFooterString(ModelMap modelMap){
-        Phrase phrase = phraseService.findRandomPhrase();
-        if (phrase != null)
-            modelMap.addAttribute("footerString", phrase.getContent());
     }
 }

@@ -130,7 +130,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "phrase/random",
+                    url: "/phrase/random",
                     cache: false,
                     timer: 1000,
                     success(textSpan) {
@@ -141,10 +141,12 @@
                     }
                 })
             };
-            window.onload = () => {
-                updateFooter();
-                setInterval(updateFooter, 300000);
-            }
+            document.addEventListener("DOMContentLoaded",() => {
+                document.documentElement.classList.add("h-100");
+                document.body.classList.add("d-flex", "flex-column", "h-100");
+                updateFooter()
+                setInterval(updateFooter, 5000);
+            });
         </script>
     </footer>
 </div>

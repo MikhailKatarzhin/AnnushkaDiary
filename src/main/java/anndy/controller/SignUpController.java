@@ -1,8 +1,7 @@
 package anndy.controller;
 
-import anndy.model.Phrase;
 import anndy.model.User;
-import anndy.service.interfaces.PhraseService;
+import anndy.phrase.IPhraseService;
 import anndy.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 public class SignUpController {
 
     private final UserService userService;
-    private final PhraseService phraseService;
+    private final IPhraseService phraseService;
     private final HttpServletRequest httpServletRequest;
 
     @Autowired
-    public SignUpController(UserService userService, PhraseService phraseService, HttpServletRequest httpServletRequest) {
+    public SignUpController(UserService userService, IPhraseService phraseService, HttpServletRequest httpServletRequest) {
         this.userService = userService;
         this.phraseService = phraseService;
         this.httpServletRequest = httpServletRequest;
@@ -28,7 +27,6 @@ public class SignUpController {
 
     @GetMapping("/sign_up")
     public String signUp(ModelMap model) {
-        insertRandomPhraseIntoFooterString(model);
         if (userService.getRemoteUser() != null)
             return "redirect:/profile";
         model.addAttribute("user", new User());
@@ -38,7 +36,6 @@ public class SignUpController {
     @Transactional
     @PostMapping("/sign_up")
     public String addUser(@RequestParam String confirmPassword, User user, ModelMap model) {
-        insertRandomPhraseIntoFooterString(model);
         model = checkRegistrationData(confirmPassword, user, model);
         if (model.size() > 4) {
             return "auth/sign_up";
@@ -64,18 +61,10 @@ public class SignUpController {
         return model;
     }
 
-    private void insertRandomPhraseIntoFooterString(ModelMap modelMap){
-        Phrase phrase = phraseService.findRandomPhrase();
-        if (phrase != null)
-            modelMap.addAttribute("footerString", phrase.getContent());
-    }
-
-
     @GetMapping("/sign_in")
     public String signIn(ModelMap model){
         if (httpServletRequest.getRemoteUser() != null)
             return "redirect:/profile";
-        insertRandomPhraseIntoFooterString(model);
         return "auth/sign_in";
     }
 }

@@ -33,13 +33,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/administration/**")
+                    .antMatchers("/administration/**", "/phrase/random")
                         .hasAnyAuthority("АДМИНИСТРАТОР")
                     .antMatchers("/consumer/**")
                         .hasAnyAuthority("ПОЛЬЗОВАТЕЛЬ")
                     .antMatchers("/sign_in", "/sign_up")
                         .anonymous()
-                    .antMatchers("/profile/**")
+                    .antMatchers("/profile/**", "/phrase/random")
                         .authenticated()
                     .antMatchers("/", "/webjars/**", "/css/**", "/home/**", "/phrase/random")
                         .permitAll()

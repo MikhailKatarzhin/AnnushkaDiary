@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Phrase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "content", nullable = false, length = 1000, unique = true)

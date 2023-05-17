@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-100"
+<html
       lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -9,7 +9,7 @@
           href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
 </head>
 
-<body class="text-center d-flex flex-column h-100">
+<body>
 <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
 <form th:action="@{/sign_in}" method="post" class="form-sign m-auto col-3">
     <h1 class="h3 mb-3 fw-normal">Слышь, авторизуйся!</h1>

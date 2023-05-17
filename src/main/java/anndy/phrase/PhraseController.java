@@ -1,7 +1,6 @@
 package anndy.phrase;
 
 import anndy.model.Phrase;
-import anndy.service.interfaces.PhraseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class PhraseController {
 
-    private final PhraseService phraseService;
+    private final IPhraseService phraseService;
 
-    public PhraseController(PhraseService phraseService) {
+    public PhraseController(IPhraseService phraseService) {
         this.phraseService = phraseService;
     }
 
