@@ -9,10 +9,10 @@
           href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
 </head>
 
-<body>
+<body class="text-center">
 <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
 <form th:action="@{/sign_in}" method="post" class="form-sign m-auto col-3">
-    <h1 class="h3 mb-3 fw-normal">Слышь, авторизуйся!</h1>
+    <h1 class="h3 mb-3 fw-normal">Пожалуйста, авторизуйтесь!</h1>
 
     <div class="mt-1 mb-1 text-muted" th:if="${param.error}">Неверный ввод никнейма и/или пароля.</div>
     <div class="mt-1 mb-1 text-muted" th:if="${param.logout}">Вы вышли из профиля.</div>
