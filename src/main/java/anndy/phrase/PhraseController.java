@@ -3,7 +3,6 @@ package anndy.phrase;
 import anndy.model.Phrase;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -62,8 +61,7 @@ public class PhraseController {
     @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
     public List<Phrase> getPhrases(@RequestParam(value = "page", defaultValue = "1") int page) {
-        List<Phrase> phrases = new ArrayList<>(phraseService.phraseSetByNumberPageList(page));
-        return phrases;
+        return new ArrayList<>(phraseService.phraseSetByNumberPageList(page));
     }
 
     @GetMapping("/get_page_count")
