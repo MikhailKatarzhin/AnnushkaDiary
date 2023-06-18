@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <title>Перечень страниц</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
+</head>
+<body class="text-center">
+<header>
+    <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
+</header>
+<main>
+    <div role="main">
+        <div class="section">
+
+            <h1 id="markdown">Шпаргалка по markdown</h1>
+            <h2 id="_1">Заголовки</h2>
+            <pre><code class="hljs vala"><span class="hljs-preprocessor"># H1</span>
+<span class="hljs-preprocessor">## H2</span>
+<span class="hljs-preprocessor">### H3</span>
+<span class="hljs-preprocessor">#### H4</span>
+<span class="hljs-preprocessor">##### H5</span>
+<span class="hljs-preprocessor">###### H6</span>
+
+H1-H2 добавляются в навигацию слева. H1-H6 можно добавить в содержание статьи (см. ниже)
+</code></pre>
+
+            <h1 id="h1">H1</h1>
+            <h2 id="h2">H2</h2>
+            <h3 id="h3">H3</h3>
+            <h4 id="h4">H4</h4>
+            <h5 id="h5">H5</h5>
+            <h6 id="h6">H6</h6>
+            <p>H1-H2 добавляются в навигацию слева. H1-H6 можно добавить в содержание статьи (см. ниже)</p>
+            <h2 id="_2">Начертание</h2>
+            <pre><code class="hljs gherkin">Курсив обозначается одинарнимы <span class="hljs-keyword">*</span>звездочками<span class="hljs-keyword">*</span> или _подчеркиваниями_.
+
+Полужирный текст обозначаается двойными <span class="hljs-keyword">*</span><span class="hljs-keyword">*</span>звёздочками<span class="hljs-keyword">*</span><span class="hljs-keyword">*</span> или __подчеркиваниями__.
+
+Для нужно начертания можно комбинировать <span class="hljs-keyword">*</span><span class="hljs-keyword">*</span>звёздочки и _подчеркивания_<span class="hljs-keyword">*</span><span class="hljs-keyword">*</span>.
+
+</code></pre>
+
+            <p>Курсив обозначается одинарнимы <em>звездочками</em> или <em>подчеркиваниями</em>.</p>
+            <p>Полужирный текст обозначаается двойными <strong>звёздочками</strong> или <strong>подчеркиваниями</strong>.</p>
+            <p>Для нужно начертания можно комбинировать <strong>звёздочки и <em>подчеркивания</em></strong>.</p>
+            <h2 id="_3">Списки</h2>
+            <pre><code class="hljs markdown"><span class="hljs-bullet">1. </span>Первый элемент в нумерованном списке
+<span class="hljs-bullet">2. </span>Следующий элемент
+  * Элемент ненумерованного списка.
+<span class="hljs-bullet">1. </span>Номер элемента определяется автоматически, главное вставить какую-то цифру
+  1. Нумерованный подсписок
+<span class="hljs-bullet">4. </span>Ещё один элемент
+
+   Пример текста, который должен быть выровнен по элементу №4
+
+<span class="hljs-bullet">* </span>Ненумерованный список может использовать звёздочки
+<span class="hljs-bullet">- </span>Или минусы
+<span class="hljs-bullet">+ </span>Или плюсы
+</code></pre>
+
+            <ol>
+                <li>Первый элемент в нумерованном списке</li>
+                <li>Следующий элемент</li>
+                <li>Элемент ненумерованного списка. </li>
+                <li>Номер элемента определяется автоматически, главное вставить какую-то цифру</li>
+                <li>Нумерованный подсписок</li>
+                <li>Ещё один элемент  </li>
+            </ol>
+            <p>Пример текста, который должен быть выровнен по элементу №4 </p>
+            <ul>
+                <li>Ненумерованный список может использовать звёздочки</li>
+                <li>Или минусы</li>
+                <li>Или плюсы</li>
+            </ul>
+            <h2 id="_4">Ссылки</h2>
+            <p>Есть 2 способа создать ссылку</p>
+            <pre><code class="hljs markdown">[<span class="hljs-link_label">С указанием ссылки сразу</span>](<span class="hljs-link_url">https://www.google.com</span>)
+
+[<span class="hljs-link_label">С указанием ссылки в сноске</span>][<span class="hljs-link_reference">Arbitrary case-insensitive reference text</span>]
+
+[<span class="hljs-link_label">Можно использовать цифры в качестве сносок</span>][<span class="hljs-link_reference">1</span>]
+
+Также любая ссылка, обрамлённая в угловые скобки, автоматом преобразуется
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">https:</span>//<span class="hljs-attribute">www.google.com</span>&gt;</span></span>
+
+Какой-то текст перед сносками
+
+[<span class="hljs-link_reference">arbitrary case-insensitive reference text</span>]:<span class="hljs-link_url"> https://www.mozilla.org</span>
+[<span class="hljs-link_reference">1</span>]:<span class="hljs-link_url"> http://slashdot.org</span>
+[<span class="hljs-link_reference">link text itself</span>]:<span class="hljs-link_url"> http://www.reddit.com</span>
+</code></pre>
+
+            <p><a href="https://www.google.com">С указанием ссылки сразу</a></p>
+            <p><a href="https://www.mozilla.org">С указанием ссылки в сноске</a></p>
+            <p><a href="http://slashdot.org">Можно использовать цифры в качестве сносок</a></p>
+            <p>Также любая ссылка, обрамлённая в угловые скобки, автоматом преобразуется<br>
+                <a href="https://www.google.com">https://www.google.com</a></p>
+            <p>Какой-то текст перед сносками</p>
+            <h2 id="_5">Изображения</h2>
+            <pre><code class="hljs markdown">Задаются почти также, как и ссылки (2 способа)
+
+Задание ссылки на изображения сразу:
+![<span class="hljs-link_label">alt text</span>](<span class="hljs-link_url">https://img2.fonwall.ru/o/vk/sobaka-shelti-kolli.jpg?route=mid&amp;h=750</span>)
+
+Указание ссылки на изображение в сноске:
+![<span class="hljs-link_label">alt text</span>][<span class="hljs-link_reference">logo</span>]
+
+[<span class="hljs-link_reference">logo</span>]:<span class="hljs-link_url"> https://img2.fonwall.ru/o/vk/sobaka-shelti-kolli.jpg?route=mid&amp;h=750</span>
+</code></pre>
+
+            <p>Задаются почти также, как и ссылки (2 способа)</p>
+            <p>Задание ссылки на изображения сразу: <br>
+                <img alt="alt text" src="https://img2.fonwall.ru/o/vk/sobaka-shelti-kolli.jpg?route=mid&amp;h=750" title="Logo Title Text 1"></p>
+            <p>Указание ссылки на изображение в сноске: <br>
+                <img alt="alt text" src="https://img2.fonwall.ru/o/vk/sobaka-shelti-kolli.jpg?route=mid&amp;h=750" title="Logo Title Text 2"></p>
+            <h2 id="_6">Подсветка кода и выделение элементов</h2>
+            <pre><code class="hljs autohotkey">С попмощью апострофов <span class="hljs-escape">`т</span>екст<span class="hljs-escape">` </span>будет <span class="hljs-escape">`о</span>брамлён<span class="hljs-escape">`.</span>
+
+Большие куски кода обрамляются тройными апосторофами (возникли сложности с отображением синтаксиса - всё автокомментится, поэтому где-то вместо трёх апострофов немного больше)
+При добавлении префикса языка программирования будет меняться подсветка.
+
+<span class="hljs-escape">``</span><span class="hljs-escape">`j</span>avascript
+var s = <span class="hljs-string">"JavaScript syntax highlighting"</span><span class="hljs-comment">;</span>
+alert(s)<span class="hljs-comment">;</span>
+<span class="hljs-escape">``</span><span class="hljs-escape">``</span><span class="hljs-escape">``</span>
+</code></pre>
+
+            <pre><code class="python hljs">s = <span class="hljs-string">"Python syntax highlighting"</span>
+<span class="hljs-keyword">print</span> s
+``````
+
+</code></pre>
+
+            <pre><code class="hljs stata"><span class="hljs-keyword">No</span> language indicated, <span class="hljs-keyword">so</span> <span class="hljs-keyword">no</span> <span class="hljs-keyword">syntax</span> highlighting.
+But let's throw <span class="hljs-keyword">in</span> a &lt;b&gt;tag&lt;/b&gt;.
+</code></pre>
+
+            <p>С попмощью апострофов <code>текст</code> будет <code>обрамлён</code>.</p>
+            <p>Большие куски кода обрамляются тройными апосторофами (возникли сложности с отображением синтаксиса - всё автокомментится, поэтому где-то вместо трёх апострофов немного больше)<br>
+                При добавлении префикса языка программирования будет меняться подсветка.</p>
+            <pre><code class="javascript hljs"><span class="hljs-keyword">var</span> s = <span class="hljs-string">"JavaScript syntax highlighting"</span>;
+alert(s);
+</code></pre>
+
+            <pre><code class="python hljs">s = <span class="hljs-string">"Python syntax highlighting"</span>
+<span class="hljs-keyword">print</span> s
+</code></pre>
+
+            <pre><code class="hljs stata"><span class="hljs-keyword">No</span> language indicated, <span class="hljs-keyword">so</span> <span class="hljs-keyword">no</span> <span class="hljs-keyword">syntax</span> highlighting.
+But let's throw <span class="hljs-keyword">in</span> a &lt;b&gt;tag&lt;/b&gt;.
+</code></pre>
+
+            <h2 id="_7">Таблицы</h2>
+            <pre><code class="hljs ruby">Обязательно требуют заголовок и настройки выравнивания (второй строкой). Выравнивание задаётся двоеточием. Колонки задаются вертикальным палками (|)
+
+| <span class="hljs-constant">Tables</span>        | <span class="hljs-constant">Are</span>           | <span class="hljs-constant">Cool</span>  |
+| ------------- |<span class="hljs-symbol">:-------------</span><span class="hljs-symbol">:|</span> -----<span class="hljs-symbol">:|</span>
+| col <span class="hljs-number">3</span> is      | right-aligned | <span class="hljs-variable">$1600</span> |
+| col <span class="hljs-number">2</span> is      | centered      |   <span class="hljs-variable">$12</span> |
+| zebra stripes | are neat      |    <span class="hljs-variable">$1</span> |
+
+Внешние вертикальные палки (|) задавать необзяательно, также не требуется подгонять колонки под один размер. Можно использовать стили, описанные выше.
+
+<span class="hljs-constant">Markdown</span> | <span class="hljs-constant">Less</span> | <span class="hljs-constant">Pretty</span>
+--- | --- | ---
+*<span class="hljs-constant">Still</span>* | <span class="hljs-string">`renders`</span> | **nicely**
+<span class="hljs-number">1</span> | <span class="hljs-number">2</span> | <span class="hljs-number">3</span>
+
+</code></pre>
+
+            <p>Обязательно требуют заголовок и настройки выравнивания (второй строкой). Выравнивание задаётся двоеточием. Колонки задаются вертикальным палками (|)</p>
+            <table class="docutils">
+                <thead>
+                <tr>
+                    <th>Tables</th>
+                    <th align="center">Are</th>
+                    <th align="right">Cool</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>col 3 is</td>
+                    <td align="center">right-aligned</td>
+                    <td align="right">$1600</td>
+                </tr>
+                <tr>
+                    <td>col 2 is</td>
+                    <td align="center">centered</td>
+                    <td align="right">$12</td>
+                </tr>
+                <tr>
+                    <td>zebra stripes</td>
+                    <td align="center">are neat</td>
+                    <td align="right">$1</td>
+                </tr>
+                </tbody>
+            </table>
+            <p>Внешние вертикальные палки (|) задавать необзяательно, также не требуется подгонять колонки под один размер. Можно использовать стили, описанные выше.</p>
+            <table class="docutils">
+                <thead>
+                <tr>
+                    <th>Markdown</th>
+                    <th>Less</th>
+                    <th>Pretty</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><em>Still</em></td>
+                    <td><code>renders</code></td>
+                    <td><strong>nicely</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+                </tbody>
+            </table>
+            <h2 id="_10">Содержание</h2>
+            <pre><code class="hljs stylus">Собирает все h1-<span class="hljs-tag">h6</span> в статье и делает на них ссылки
+
+[TOC]
+</code></pre>
+
+            <p>Собирает все h1-h6 в статье и делает на них ссылки</p>
+            <div class="toc">
+                <ul>
+                    <li><a href="#markdown">Шпаргалка по markdown</a><ul>
+                        <li><a href="#_1">Заголовки</a></li>
+                    </ul>
+                    </li>
+                    <li><a href="#h1">H1</a><ul>
+                        <li><a href="#h2">H2</a><ul>
+                            <li><a href="#h3">H3</a><ul>
+                                <li><a href="#h4">H4</a><ul>
+                                    <li><a href="#h5">H5</a><ul>
+                                        <li><a href="#h6">H6</a></li>
+                                    </ul>
+                                    </li>
+                                </ul>
+                                </li>
+                            </ul>
+                            </li>
+                        </ul>
+                        </li>
+                        <li><a href="#_2">Начертание</a></li>
+                        <li><a href="#_3">Списки</a></li>
+                        <li><a href="#_4">Ссылки</a></li>
+                        <li><a href="#_5">Изображения</a></li>
+                        <li><a href="#_6">Подсветка кода и выделение элементов</a></li>
+                        <li><a href="#_7">Таблицы</a></li>
+                        <li><a href="#_10">Содержание</a></li>
+                        <li><a href="#html">HTML</a></li>
+                        <li><a href="#_11">Линия</a></li>
+                    </ul>
+                    </li>
+                </ul>
+            </div>
+            <h2 id="html">HTML</h2>
+            <pre><code class="hljs gherkin">В любой момент можно вставить кусок html и не париться.
+
+<span class="hljs-variable">&lt;div&gt;</span>
+  <span class="hljs-variable">&lt;p&gt;</span>Тег. Внутри тега markdown <span class="hljs-keyword">*</span><span class="hljs-keyword">*</span>игнорируется<span class="hljs-keyword">*</span><span class="hljs-keyword">*</span>.<span class="hljs-variable">&lt;/p&gt;</span>
+<span class="hljs-variable">&lt;/div&gt;</span>
+</code></pre>
+
+            <p>В любой момент можно вставить кусок html и не париться.</p>
+            <div>
+                <p>Тег. Внутри тега markdown **игнорируется**.</p>
+            </div>
+
+            <h2 id="_11">Линия</h2>
+            <pre><code class="hljs gherkin">Три или больше символов задают линию
+
+---
+
+Дефисы
+
+<span class="hljs-keyword">*</span><span class="hljs-keyword">*</span><span class="hljs-keyword">*</span>
+
+Звёздочки
+
+___
+
+Подчеркивания
+</code></pre>
+
+            <p>Три или больше символов задают линию</p>
+            <hr>
+            <p>Дефисы</p>
+            <hr>
+            <p>Звёздочки</p>
+            <hr>
+            <p>Подчеркивания</p>
+
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/navigation_fragments  :: footer}"></footer>
+</body>
+<script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js"></script>
+</html>
