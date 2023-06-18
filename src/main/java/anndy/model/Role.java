@@ -1,5 +1,6 @@
 package anndy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class Role {
     @Column(name = "name", nullable = false, length = 20)
     private String name;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "\"User_Role\"",
             joinColumns = @JoinColumn(name = "role_id"),

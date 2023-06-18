@@ -64,11 +64,11 @@
     function updateTable(page) {
         currentPage = page;
         $.ajax({
-            url: '/phrase/get_pages?page=' + page, // URL для получения данных с сервера
+            url: '/page/get_pages?page=' + page, // URL для получения данных с сервера
             method: 'GET',
             success: function (pages) {
                 // Очищаем tbody таблицы
-                $('#phrasesTable tbody').empty();
+                $('#pagesTable tbody').empty();
 
                 // Перебираем полученные записи и добавляем их в таблицу
                 for (let i = 0; i < pages.length; i++) {
@@ -78,7 +78,7 @@
                         '<td><form action="/page/view?pageId='+pag.id+'" method="GET"><button type="submit" class="btn btn-secondary btn-sm">Открыть страницу</button></form></td>' +
                         '</tr>';
 
-                    $('#phrasesTable tbody').append(row);
+                    $('#pagesTable tbody').append(row);
                 }
 
                 // Обновляем пагинацию
