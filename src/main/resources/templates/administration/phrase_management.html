@@ -45,7 +45,7 @@
 <script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-    var currentPage = 1;
+    let currentPage = 1;
     function deletePhrase(id) {
         $.ajax({
             url: '/phrase/remove',
@@ -96,15 +96,15 @@
 
     // Функция для обновления пагинации
     function updatePagination(totalPages, currentPage) {
-        var paginationContainer = $('#paginationContainer');
+        let paginationContainer = $('#paginationContainer');
         paginationContainer.empty();
         if (totalPages <= 1) {
             return; // Нет необходимости отображать пагинацию
         }
 
         if (currentPage > 1) {
-            var previousPage = currentPage - 1;
-            var previousButton = $('<li>').addClass('page-item')
+            let previousPage = currentPage - 1;
+            let previousButton = $('<li>').addClass('page-item')
                 .append($('<a>').addClass('page-link').attr('href', '#').text('«').click(function () {
                     updatePhrasesTable(previousPage);
                 }));
@@ -126,8 +126,8 @@
             paginationContainer.append(pageButton);
         }
         if (currentPage < totalPages) {
-            var nextPage = currentPage + 1;
-            var nextButton = $('<li>').addClass('page-item')
+            let nextPage = currentPage + 1;
+            let nextButton = $('<li>').addClass('page-item')
                 .append($('<a>').addClass('page-link').attr('href', '#').text('»').click(function () {
                     updatePhrasesTable(nextPage);
                 }));
@@ -152,17 +152,17 @@
     $(document).ready(function () {
         $('#addPhraseForm').submit(function (event) {
             event.preventDefault();
-            var form = $(this);
+            let form = $(this);
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function (response) {
                     // Отображение сообщения об успешном добавлении или ошибке
-                    var messageContainer = $('#messageContainer');
+                    let messageContainer = $('#messageContainer');
                     messageContainer.empty(); // Очистка контейнера сообщений
 
-                    var message = $('<div>').addClass('alert');
+                    let message = $('<div>').addClass('alert');
                     if (response.startsWith('Ошибка: ')) {
                         message.addClass('alert-danger');
                     } else {
@@ -177,10 +177,10 @@
                 },
                 error: function () {
                     // Обработка ошибки AJAX-запроса
-                    var messageContainer = $('#messageContainer');
+                    let messageContainer = $('#messageContainer');
                     messageContainer.empty(); // Очистка контейнера сообщений
 
-                    var message = $('<div>').addClass('alert alert-danger');
+                    let message = $('<div>').addClass('alert alert-danger');
                     message.text('Error occurred while adding phrase');
                     messageContainer.append(message);
                 }
