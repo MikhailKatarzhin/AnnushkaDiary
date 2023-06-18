@@ -16,3 +16,8 @@ INSERT INTO
     "User_Role" (user_id, role_id)
 VALUES
     (0, 0);
+
+INSERT INTO
+    "Diary" (id, user_id)
+VALUES
+    (0, 0);

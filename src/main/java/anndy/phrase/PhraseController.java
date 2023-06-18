@@ -66,7 +66,7 @@ public class PhraseController {
     @GetMapping("/get_page_count")
     @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
-    public long getPhrases() {
+    public long getPhrasesPageCount() {
         return phraseService.pageCount();
     }
 }

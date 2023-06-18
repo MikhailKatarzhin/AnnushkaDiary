@@ -1,7 +1,6 @@
-package anndy.controller;
+package anndy.auth;
 
 import anndy.model.User;
-import anndy.phrase.IPhraseService;
 import anndy.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,13 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 public class SignUpController {
 
     private final UserService userService;
-    private final IPhraseService phraseService;
     private final HttpServletRequest httpServletRequest;
 
     @Autowired
-    public SignUpController(UserService userService, IPhraseService phraseService, HttpServletRequest httpServletRequest) {
+    public SignUpController(UserService userService, HttpServletRequest httpServletRequest) {
         this.userService = userService;
-        this.phraseService = phraseService;
         this.httpServletRequest = httpServletRequest;
     }
 

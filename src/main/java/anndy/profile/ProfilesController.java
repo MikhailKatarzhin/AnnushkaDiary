@@ -1,4 +1,4 @@
-package anndy.controller;
+package anndy.profile;
 
 import anndy.model.User;
 import anndy.phrase.IPhraseService;

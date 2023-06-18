@@ -35,6 +35,11 @@
             </form></td>
         </tr>
     </table>
+    <div>
+        <form th:action="@{/page/pages}" method="GET" class="form-sign m-auto col-3">
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Открыть перечень страниц</button>
+        </form>
+    </div>
 </main>
 <footer th:replace="~{fragments/navigation_fragments  :: footer}"></footer>
 <script type="text/javascript"

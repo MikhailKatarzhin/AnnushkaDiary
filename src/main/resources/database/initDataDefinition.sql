@@ -292,14 +292,14 @@ CREATE TABLE IF NOT EXISTS "Diary" (
 CREATE TABLE IF NOT EXISTS "Page" (
     id BIGSERIAL NOT NULL,
     diary_id bigint NOT NULL,
-    date date NOT NULL DEFAULT now(),
+    date date NOT NULL DEFAULT CURRENT_DATE,
     content VARCHAR(10000) NOT NULL,
     CONSTRAINT "PK_Page_id" PRIMARY KEY (id),
     CONSTRAINT "FK_Page_occupies_Diary" FOREIGN KEY (diary_id)
         REFERENCES "Diary" (id)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-    CONSTRAINT "CH_Page_was_wrote_at_date" CHECK ("Page".date <= now())
+    CONSTRAINT "CH_Page_was_wrote_at_date" CHECK ("Page".date <= CURRENT_DATE)
 );
 
 

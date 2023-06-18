@@ -1,6 +1,8 @@
 package anndy.service.implementation;
 
 import anndy.config.WebSecurityConfig;
+import anndy.diary.Diary;
+import anndy.diary.DiaryRepository;
 import anndy.model.Role;
 import anndy.model.User;
 import anndy.repo.RoleRepository;
@@ -26,14 +28,16 @@ public class UserService implements anndy.service.interfaces.UserService {
     private final HttpServletRequest httpServletRequest;
     private final BCryptPasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final DiaryRepository diaryRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, HttpServletRequest httpServletRequest
-            , BCryptPasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+            , BCryptPasswordEncoder passwordEncoder, RoleRepository roleRepository, DiaryRepository diaryRepository) {
         this.userRepository = userRepository;
         this.httpServletRequest = httpServletRequest;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.diaryRepository = diaryRepository;
     }
 
     @Override
@@ -78,6 +82,9 @@ public class UserService implements anndy.service.interfaces.UserService {
         roleRepository.findByNames(String.join(", ", new String[]{"ПОЛЬЗОВАТЕЛЬ"})).ifPresent(roleSet::add);
         user.setRoles(roleSet);
         user = userRepository.save(user);
+        Diary diary =new Diary();
+        diary.setUser(user);
+        diaryRepository.save(diary);
         logger.info("Signed up new user [id:{}] with roles: {}", user.getId()
                 , user.getRoles().stream().map(Role::getName).collect(Collectors.joining(", ")));
         return user;
