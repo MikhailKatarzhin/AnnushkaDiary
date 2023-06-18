@@ -22,6 +22,19 @@
             text-align: center;
             line-height: 50px;
         }
+        .wrapper {
+            display: flex;
+            height: 100%;
+        }
+
+        .left-key, .right-key {
+            flex: 1;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .content {
+            flex: 8;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
 </head>
@@ -30,9 +43,16 @@
     <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
 </header>
 <main>
-    <div th:class="text-start">
-        <label class="form-label" th:text="'Идентификатор страницы -' + ${currentPage}"></label>
-        <div th:utext="${content}"></div>
+    <div class="wrapper">
+        <a th:href="${previous}" class="left-key">&#8592;</a>
+        <div class="content">
+            <!-- Ваше содержимое страницы -->
+            <div th:class="text-start">
+                <label class="form-label" th:text="'Идентификатор страницы -' + ${currentPage}"></label>
+                <div th:utext="${content}"></div>
+            </div>
+        </div>
+        <a th:href="${next}" class="right-key">&#8594;</a>
     </div>
 </main>
 <footer th:replace="~{fragments/navigation_fragments  :: footer}"></footer>

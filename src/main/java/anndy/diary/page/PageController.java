@@ -54,6 +54,13 @@ public class PageController {
         Parser parser = Parser.builder().build();
         Node document = parser.parse(page.getContent());
         HtmlRenderer renderer = HtmlRenderer.builder().build();
+        long diaryId = diaryService.getDiaryIdByUserId(userService.getRemoteUserId());
+        Long previousId = pageService.findPreviousId(diaryId, pageId);
+        Long nextId = pageService.findNextId(diaryId, pageId);
+        String previous = (previousId == null ? "/page/pages" : ("/page/view?pageId=" + previousId));
+        String next = (nextId == null ? "/page/pages" : ("/page/view?pageId=" + nextId));
+        model.addAttribute("previous", previous);
+        model.addAttribute("next", next);
         model.addAttribute("currentPage", pageId);
         model.addAttribute("content", renderer.render(document));
         return "diary/page_view";

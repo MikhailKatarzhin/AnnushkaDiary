@@ -19,6 +19,17 @@ public class PageService implements IPageService {
         return pageRepository.getById(id);
     }
 
+    @Override
+    public Long findPreviousId(long diaryId, long currentId){
+        return pageRepository.findPreviousPageId(diaryId, currentId);
+    }
+
+    @Override
+    public Long findNextId(long diaryId, long currentId){
+        return pageRepository.findNextPageId(diaryId, currentId);
+    }
+
+    @Override
     public Page save(Diary diary, String content){
         Page page = new Page();
         page.setContent(content);
