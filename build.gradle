@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.commonmark:commonmark:0.17.2'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.6.3'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.6.3'

@@ -3,7 +3,11 @@ package anndy.diary.page;
 import anndy.diary.Diary;
 import anndy.diary.IDiaryService;
 import anndy.service.interfaces.UserService;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -44,8 +48,14 @@ public class PageController {
         return "redirect:/page/pages";
     }
 
-    @GetMapping("/page/view")
-    public String pageView(@RequestParam(value = "pageId") int pageId){
+    @GetMapping("/view")
+    public String pageView(@RequestParam(value = "pageId") int pageId, ModelMap model){
+        Page page = pageService.findById(pageId);
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(page.getContent());
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        model.addAttribute("currentPage", pageId);
+        model.addAttribute("content", renderer.render(document));
         return "diary/page_view";
     }
 
