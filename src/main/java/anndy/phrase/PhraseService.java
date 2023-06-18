@@ -1,6 +1,5 @@
 package anndy.phrase;
 
-import anndy.model.Phrase;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,8 +64,7 @@ public class PhraseService implements IPhraseService {
 
     @Override
     public Set<Phrase> phraseSetByNumberPageList(long numberPageList) {
-        Set<Phrase> tmp = phraseSetByNumberPageListAndRowOnPage(numberPageList, 10L);
-        return tmp;
+        return phraseSetByNumberPageListAndRowOnPage(numberPageList, 10L);
     }
 
     @Override

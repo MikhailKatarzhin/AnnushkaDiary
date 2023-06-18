@@ -1,4 +1,4 @@
-package anndy.model;
+package anndy.phrase;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

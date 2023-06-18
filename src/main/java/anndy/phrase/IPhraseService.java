@@ -1,6 +1,5 @@
 package anndy.phrase;
 
-import anndy.model.Phrase;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
