@@ -30,4 +30,6 @@ public interface IPhraseService {
     Phrase findPhraseByContent(String content);
 
     Long pageCount(long rowOnPage);
+
+    Long pageCount();
 }

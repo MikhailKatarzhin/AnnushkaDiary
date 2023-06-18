@@ -60,12 +60,13 @@ public class PhraseService implements IPhraseService {
 
     @Override
     public Set<Phrase> phraseSetByNumberPageListAndRowOnPage(long numberPageList, long rowOnPage) {
-        return phraseSetByNumberPageListAndRowOnPageAndContentPart(rowOnPage, (numberPageList - 1) * rowOnPage, "");
+        return phraseSetByNumberPageListAndRowOnPageAndContentPart(numberPageList, rowOnPage, "");
     }
 
     @Override
     public Set<Phrase> phraseSetByNumberPageList(long numberPageList) {
-        return phraseSetByNumberPageListAndRowOnPage(numberPageList, 10L);
+        Set<Phrase> tmp = phraseSetByNumberPageListAndRowOnPage(numberPageList, 10L);
+        return tmp;
     }
 
     @Override
@@ -77,5 +78,9 @@ public class PhraseService implements IPhraseService {
     public Long pageCount(long rowOnPage) {
         long nPage = phraseRepository.count() / rowOnPage + (phraseRepository.count() % rowOnPage == 0 ? 0 : 1);
         return nPage == 0 ? nPage + 1 : nPage;
+    }
+    @Override
+    public Long pageCount() {
+        return pageCount(10);
     }
 }

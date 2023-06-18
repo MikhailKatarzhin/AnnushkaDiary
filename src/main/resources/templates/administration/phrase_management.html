@@ -1,24 +1,194 @@
 <!DOCTYPE html>
-<html
-      lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      data-bs-theme="auto"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
 <head>
     <meta charset="UTF-8">
-    <title></title>
-    <link rel="stylesheet" type="text/css"
-          href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
+    <title>Управление фразами</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
 </head>
-<body>
-<header><div th:insert="~{fragments/navigation_fragments  :: navbar}"></div></header>
-<main><div>
-
-</div></main>
+<body class="text-center">
+<header>
+    <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
+</header>
+<main>
+    <div>
+        <h1>Управление фразами</h1>
+        <div id="messageContainer"></div>
+        <form id="addPhraseForm" th:action="@{/phrase/add}" method="post">
+            <div class="form-floating">
+                <input type="text" class="form-control" maxlength="200"
+                       id="inputPhrase" name="inputPhrase" placeholder="Введите фразу">
+                <label for="inputPhrase">Введите фразу</label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Добавить новую фразу</button>
+        </form>
+        <hr>
+        <h1>Существующие фразы</h1>
+        <table id="phrasesTable" class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Содержание</th>
+                <th scope="col">Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center" id="paginationContainer">
+                <!-- Здесь будут отображаться элементы пагинации -->
+            </ul>
+        </nav>
+    </div>
+</main>
 <footer th:replace="~{fragments/navigation_fragments  :: footer}"></footer>
-<script type="text/javascript"
-        src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-<script type="text/javascript"
-        src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var currentPage = 1;
+    function deletePhrase(id) {
+        $.ajax({
+            url: '/phrase/remove',
+            type: 'POST',
+            data: {"id": id},
+            success: function(data) {
+                console.log(data);
+                updatePhrasesTable(currentPage);
+            },
+            error: function(xhr, status, error) {
+                console.log('Ошибка при удалении фразы: ' + error + " status: " + status);
+            }
+        });
+    }
+
+    // Функция для обновления таблицы с фразами
+    function updatePhrasesTable(page) {
+        currentPage = page;
+        $.ajax({
+            url: '/phrase/get_records?page=' + page, // URL для получения данных с сервера
+            method: 'GET',
+            success: function (phrases) {
+                // Очищаем tbody таблицы
+                $('#phrasesTable tbody').empty();
+
+                // Перебираем полученные записи и добавляем их в таблицу
+                for (let i = 0; i < phrases.length; i++) {
+                    let phrase = phrases[i];
+                    let row = '<tr>' +
+                        '<td>' + phrase.id + '</td>' +
+                        '<td>' + phrase.content + '</td>' +
+                        '<td><button class="btn btn-danger btn-sm"  onclick="deletePhrase(' + phrase.id + ')">Удалить</button></td>' +
+                        '</tr>';
+
+                    $('#phrasesTable tbody').append(row);
+                }
+
+                // Обновляем пагинацию
+                loadPageCount(page);
+            },
+            error: function (xhr, status, error) {
+                // Обработка ошибок при выполнении AJAX запроса
+                console.log('Ошибка при получении данных:', error);
+            }
+        });
+    }
+
+
+    // Функция для обновления пагинации
+    function updatePagination(totalPages, currentPage) {
+        var paginationContainer = $('#paginationContainer');
+        paginationContainer.empty();
+        if (totalPages <= 1) {
+            return; // Нет необходимости отображать пагинацию
+        }
+
+        if (currentPage > 1) {
+            var previousPage = currentPage - 1;
+            var previousButton = $('<li>').addClass('page-item')
+                .append($('<a>').addClass('page-link').attr('href', '#').text('«').click(function () {
+                    updatePhrasesTable(previousPage);
+                }));
+
+            paginationContainer.append(previousButton);
+        }
+
+        for (let i = 0; i < totalPages; i++) {
+            let pageButton = $('<li>').addClass('page-item')
+                .append($('<a>').addClass('page-link').attr('href', '#').text(i+1).click(function () {
+                    updatePhrasesTable(i+1);
+                }));
+
+            if (i+1 === currentPage) {
+                pageButton.addClass('active');
+                pageButton.prop('disabled', true);
+            }
+
+            paginationContainer.append(pageButton);
+        }
+        if (currentPage < totalPages) {
+            var nextPage = currentPage + 1;
+            var nextButton = $('<li>').addClass('page-item')
+                .append($('<a>').addClass('page-link').attr('href', '#').text('»').click(function () {
+                    updatePhrasesTable(nextPage);
+                }));
+
+            paginationContainer.append(nextButton);
+        }
+    }
+
+    function loadPageCount(currentPage) {
+        $.ajax({
+            url: '/phrase/get_page_count',
+            type: 'GET',
+            success: function(data) {
+                updatePagination(data, currentPage);
+            },
+            error: function(xhr, status, error) {
+                console.log('Ошибка при загрузке количества страниц: ' + error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#addPhraseForm').submit(function (event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    // Отображение сообщения об успешном добавлении или ошибке
+                    var messageContainer = $('#messageContainer');
+                    messageContainer.empty(); // Очистка контейнера сообщений
+
+                    var message = $('<div>').addClass('alert');
+                    if (response.startsWith('Ошибка: ')) {
+                        message.addClass('alert-danger');
+                    } else {
+                        message.addClass('alert-success');
+                    }
+                    message.text(response);
+                    messageContainer.append(message);
+
+                    form.trigger('reset'); // Сброс формы
+                    $('#inputPhrase').focus(); // Установка фокуса на поле ввода
+                    updatePhrasesTable(); // Обновление таблицы с фразами
+                },
+                error: function () {
+                    // Обработка ошибки AJAX-запроса
+                    var messageContainer = $('#messageContainer');
+                    messageContainer.empty(); // Очистка контейнера сообщений
+
+                    var message = $('<div>').addClass('alert alert-danger');
+                    message.text('Error occurred while adding phrase');
+                    messageContainer.append(message);
+                }
+            });
+        });
+        // Инициализация таблицы с фразами при загрузке страницы
+        updatePhrasesTable(1);
+    });
+</script>
 </body>
 </html>

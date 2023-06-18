@@ -3,8 +3,11 @@ package anndy.phrase;
 import anndy.model.Phrase;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/phrase")
@@ -24,29 +27,49 @@ public class PhraseController {
         return "Фраз не обнаружено";
     }
 
-    @PostMapping("/remove/{id}")
+    @GetMapping("/management")
     @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
-    public @ResponseBody String removePhraseById(@PathVariable Long id){
+    public String managementPage(){
+        return "administration/phrase_management";
+    }
+
+    @PostMapping("/remove")
+    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
+    @ResponseBody
+    public String removePhraseById(@RequestParam("id") Long id){
         if (phraseService.findById(id) == null)
-            return "Фраза [id:"+ id +"] не найдена!";
+            return "Ошибка: Фраза [id:"+ id +"] не найдена!";
         phraseService.deleteById(id);
         return "Фраза [id:"+ id +"] удалена!";
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
-    public @ResponseBody String removePhraseById(ModelMap model){
-        String content = (String) model.getAttribute("Content");
-        if (content == null || content.isBlank())
-            return "Содержимое фразы не может быть пустым";
-        content = content.trim();
-        Phrase phrase = phraseService.findPhraseByContent(content);
+    @ResponseBody
+    public String addNewPhrase(@RequestParam("inputPhrase") String inputPhrase){
+        if (inputPhrase == null || inputPhrase.isBlank())
+            return "Ошибка: Содержимое фразы не может быть пустым";
+        inputPhrase = inputPhrase.trim();
+        Phrase phrase = phraseService.findPhraseByContent(inputPhrase);
         if (phrase == null) {
-            phrase = phraseService.save(content);
-            return "Фраза [id:" + phrase.getId() + "] добавлена!";
+            phrase = phraseService.save(inputPhrase);
+            return "Фраза [id:" + phrase.getId() + "] : |"+ inputPhrase +"| добавлена!";
         }
-        return "Фраза [id:"+ phrase.getId() +"] уже  существует!";
+        return "Ошибка: Фраза [id:"+ phrase.getId() +"] : |"+ inputPhrase +"| уже  существует!";
     }
 
+    @GetMapping("/get_records")
+    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
+    @ResponseBody
+    public List<Phrase> getPhrases(@RequestParam(value = "page", defaultValue = "1") int page) {
+        List<Phrase> phrases = new ArrayList<>(phraseService.phraseSetByNumberPageList(page));
+        return phrases;
+    }
 
+    @GetMapping("/get_page_count")
+    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
+    @ResponseBody
+    public long getPhrases() {
+        return phraseService.pageCount();
+    }
 }
