@@ -38,18 +38,19 @@ public class PageController {
     }
 
     @PostMapping("/add")
-    public String add(@RequestParam("content") String content){
+    public String add(@RequestParam("content") String content, ModelMap model){
         if (content != null)
             if (!content.isBlank()) {
                 content = content.trim();
                 Diary diary = diaryService.getDiaryByUserId(userService.getRemoteUserId());
-                pageService.save(diary, content);
+                long pageId = pageService.save(diary, content).getId();
+                return pageView(pageId, model);
             }
         return "redirect:/page/pages";
     }
 
     @GetMapping("/view")
-    public String pageView(@RequestParam(value = "pageId") int pageId, ModelMap model){
+    public String pageView(@RequestParam(value = "pageId") long pageId, ModelMap model){
         Page page = pageService.findById(pageId);
         Parser parser = Parser.builder().build();
         Node document = parser.parse(page.getContent());
@@ -62,6 +63,7 @@ public class PageController {
         model.addAttribute("previous", previous);
         model.addAttribute("next", next);
         model.addAttribute("currentPage", pageId);
+        model.addAttribute("pageDate", page.getDate());
         model.addAttribute("content", renderer.render(document));
         return "diary/page_view";
     }

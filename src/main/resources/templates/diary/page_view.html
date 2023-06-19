@@ -48,7 +48,7 @@
         <div class="content">
             <!-- Ваше содержимое страницы -->
             <div th:class="text-start">
-                <label class="form-label" th:text="'Идентификатор страницы -' + ${currentPage}"></label>
+                <label class="form-label" th:text="'Дата создания страницы[id:'+${currentPage}+'] - '+${pageDate}"></label>
                 <div th:utext="${content}"></div>
             </div>
         </div>
