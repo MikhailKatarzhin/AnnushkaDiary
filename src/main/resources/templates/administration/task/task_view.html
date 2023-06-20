@@ -259,6 +259,43 @@
         });
     }
 
+    function selectCorrectAnswer(id) {
+        $.ajax({
+            url: '/task_correct_answer/add?answerId='+ id + '&taskId='+ taskId,
+            type: 'POST',
+            success: function(data) {
+                console.log(data);
+                messageContainer.empty();
+                let message = $('<div>').addClass('alert');
+                if (data.startsWith('Ошибка: ')) {
+                    message.addClass('alert-danger');
+                } else {
+                    message.addClass('alert-success');
+                }
+                message.text(data);
+                messageContainer.append(message);
+                updateCorrectAnswer();
+            },
+            error: function(xhr, status, error) {
+                console.log('Ошибка при изменении верного ответа: ' + error + " status: " + status);
+            }
+        });
+    }
+
+    function updateCorrectAnswer() {
+        $.ajax({
+            url: '/task_correct_answer/getByTaskId?taskId='+ taskId,
+            type: 'GET',
+            success: function(data) {
+                console.log(data);
+                document.getElementById("correctAnswer").value = data;
+            },
+            error: function(xhr, status, error) {
+                console.log('Ошибка при выводе верного ответа: ' + error + " status: " + status);
+            }
+        });
+    }
+
     // Функция для обновления таблицы
     function updateSelectedAnswerTable(page) {
         currentPage = page;
@@ -275,6 +312,7 @@
                     let row = '<tr>' +
                         '<td>' + answer.description + '</td>' +
                         '<td><button class="btn btn-danger btn-sm"  onclick="removeAnswer(' + answer.id + ')">Открепить</button></td>' +
+                        '<td><button class="btn btn-primary btn-sm"  onclick="selectCorrectAnswer(' + answer.id + ')">Выбрать верным</button></td>' +
                         '</tr>';
 
                     $('#selectedAnswerTable tbody').append(row);
@@ -350,6 +388,7 @@
         // Инициализация таблицы с ответами при загрузке страницы
         updateAnswerTable(1);
         updateSelectedAnswerTable(1);
+        updateCorrectAnswer();
     });
 </script>
 </html>
