@@ -3,6 +3,7 @@ package anndy.answer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 @Service
@@ -70,5 +71,56 @@ public class AnswerService implements IAnswerService {
     @Override
     public Long pageCount() {
         return pageCount(10);
+    }
+
+    @Override
+    public ArrayList<Answer> answerSetByNumberPageListAndRowOnPageAndTaskId(
+            long numberPageList
+            , long rowOnPage
+            , long taskId
+    ) {
+        long offset = (numberPageList - 1) * rowOnPage;
+        return answerRepository.getAnswersByLimitOffsetAndTaskId(taskId, rowOnPage, offset);
+    }
+    @Override
+    public ArrayList<Answer> answerSetByNumberPageListAndTaskId(
+            long numberPageList
+            , long taskId
+    ) {
+        return answerSetByNumberPageListAndRowOnPageAndTaskId(numberPageList, 10L, taskId);
+    }
+
+    @Override
+    public Long pageCountByTaskId(long rowOnPage, long taskId) {
+        long count = answerRepository.countAnswerByTaskId(taskId);
+        long nPage = count / rowOnPage + (count % rowOnPage == 0 ? 0 : 1);
+        return nPage == 0 ? nPage + 1 : nPage;
+    }
+
+    @Override
+    public Long pageCountByTaskId(long taskId) {
+        return pageCountByTaskId(10, taskId);
+    }
+
+    @Override
+    public Set<Answer> answerSetByNumberPageListAndRowOnPageAndNotTaskId(long numberPageList, long rowOnPage, long taskId) {
+        return answerRepository.getAnswersByLimitOffsetAndNotTaskId(rowOnPage, (numberPageList - 1) * rowOnPage, taskId);
+    }
+
+    @Override
+    public Set<Answer> answerSetByNumberPageListAndNotTaskId(long numberPageList, long taskId) {
+        return answerSetByNumberPageListAndRowOnPageAndNotTaskId(numberPageList, 10L, taskId);
+    }
+
+    @Override
+    public Long pageCountByNotTaskId(long rowOnPage, long taskId) {
+        long count = answerRepository.countAnswerByNotTaskId(taskId);
+        long nPage = count / rowOnPage + (count % rowOnPage == 0 ? 0 : 1);
+        return nPage == 0 ? nPage + 1 : nPage;
+    }
+
+    @Override
+    public Long pageCountByNotTaskId(long taskId) {
+        return pageCountByNotTaskId(10L, taskId);
     }
 }
