@@ -39,8 +39,6 @@ public class PhraseService implements IPhraseService {
     }
 
     @Override
-    @Transactional
-    @Modifying
     public void deleteById(long id){
         phraseRepository.deleteById(id);
     }

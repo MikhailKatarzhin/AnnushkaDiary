@@ -12,8 +12,6 @@ public interface IPhraseService {
     @Transactional
     Phrase save(String content);
 
-    @Transactional
-    @Modifying
     void deleteById(long id);
 
     Set<Phrase> phraseSetByNumberPageListAndRowOnPageAndContentPart(

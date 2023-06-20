@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
 <head>
     <meta charset="UTF-8">
-    <title>Управление фразами</title>
+    <title>Управление ответами</title>
     <style>
         body {
             display: flex;
@@ -31,19 +31,21 @@
 </header>
 <main>
     <div>
-        <h1>Управление фразами</h1>
+        <h1>Управление Ответами</h1>
+        <hr>
+        <h2>Добавление Ответа</h2>
         <div id="messageContainer"></div>
-        <form id="addPhraseForm" th:action="@{/phrase/add}" method="post">
+        <form id="addAnswerForm" th:action="@{/answer/add}" method="post">
             <div class="form-floating">
                 <input type="text" class="form-control" maxlength="200"
-                       id="inputPhrase" name="inputPhrase" placeholder="Введите фразу">
-                <label for="inputPhrase">Введите фразу</label>
+                       id="inputAnswer" name="inputAnswer" placeholder="Введите новый ответ">
+                <label for="inputAnswer">Введите новый ответ</label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Добавить новую фразу</button>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Добавить новый ответ</button>
         </form>
         <hr>
-        <h1>Существующие фразы</h1>
-        <table id="phrasesTable" class="table table-striped table-sm">
+        <h2>Существующие ответы</h2>
+        <table id="answerTable" class="table table-striped table-sm">
             <thead>
             <tr>
                 <th scope="col">Id</th>
@@ -67,40 +69,40 @@
 <script type="text/javascript" src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     let currentPage = 1;
-    function deletePhrase(id) {
+    function deleteAnswer(id) {
         $.ajax({
-            url: '/phrase/remove?idPhrase='+id,
+            url: '/answer/delete?idAnswer='+id,
             type: 'POST',
             success: function(data) {
                 console.log(data);
-                updatePhrasesTable(currentPage);
+                updateTable(currentPage);
             },
             error: function(xhr, status, error) {
-                console.log('Ошибка при удалении фразы: ' + error + " status: " + status);
+                console.log('Ошибка при удалении ответа: ' + error + " status: " + status);
             }
         });
     }
 
-    // Функция для обновления таблицы с фразами
-    function updatePhrasesTable(page) {
+    // Функция для обновления таблицы
+    function updateTable(page) {
         currentPage = page;
         $.ajax({
-            url: '/phrase/get_records?page=' + page, // URL для получения данных с сервера
+            url: '/answer/get_records?page=' + page, // URL для получения данных с сервера
             method: 'GET',
-            success: function (phrases) {
+            success: function (answers) {
                 // Очищаем tbody таблицы
-                $('#phrasesTable tbody').empty();
+                $('#answerTable tbody').empty();
 
                 // Перебираем полученные записи и добавляем их в таблицу
-                for (let i = 0; i < phrases.length; i++) {
-                    let phrase = phrases[i];
+                for (let i = 0; i < answers.length; i++) {
+                    let answer = answers[i];
                     let row = '<tr>' +
-                        '<td>' + phrase.id + '</td>' +
-                        '<td>' + phrase.content + '</td>' +
-                        '<td><button class="btn btn-danger btn-sm"  onclick="deletePhrase(' + phrase.id + ')">Удалить</button></td>' +
+                        '<td>' + answer.id + '</td>' +
+                        '<td>' + answer.description + '</td>' +
+                        '<td><button class="btn btn-danger btn-sm"  onclick="deleteAnswer(' + answer.id + ')">Удалить</button></td>' +
                         '</tr>';
 
-                    $('#phrasesTable tbody').append(row);
+                    $('#answerTable tbody').append(row);
                 }
 
                 // Обновляем пагинацию
@@ -126,7 +128,7 @@
             let previousPage = currentPage - 1;
             let previousButton = $('<li>').addClass('page-item')
                 .append($('<a>').addClass('page-link').attr('href', '#').text('«').click(function () {
-                    updatePhrasesTable(previousPage);
+                    updateTable(previousPage);
                 }));
 
             paginationContainer.append(previousButton);
@@ -135,7 +137,7 @@
         for (let i = 0; i < totalPages; i++) {
             let pageButton = $('<li>').addClass('page-item')
                 .append($('<a>').addClass('page-link').attr('href', '#').text(i+1).click(function () {
-                    updatePhrasesTable(i+1);
+                    updateTable(i+1);
                 }));
 
             if (i+1 === currentPage) {
@@ -149,7 +151,7 @@
             let nextPage = currentPage + 1;
             let nextButton = $('<li>').addClass('page-item')
                 .append($('<a>').addClass('page-link').attr('href', '#').text('»').click(function () {
-                    updatePhrasesTable(nextPage);
+                    updateTable(nextPage);
                 }));
 
             paginationContainer.append(nextButton);
@@ -158,7 +160,7 @@
 
     function loadPageCount(currentPage) {
         $.ajax({
-            url: '/phrase/get_page_count',
+            url: '/answer/get_page_count',
             type: 'GET',
             success: function(data) {
                 updatePagination(data, currentPage);
@@ -170,7 +172,7 @@
     }
 
     $(document).ready(function () {
-        $('#addPhraseForm').submit(function (event) {
+        $('#addAnswerForm').submit(function (event) {
             event.preventDefault();
             let form = $(this);
             $.ajax({
@@ -192,8 +194,8 @@
                     messageContainer.append(message);
 
                     form.trigger('reset'); // Сброс формы
-                    $('#inputPhrase').focus(); // Установка фокуса на поле ввода
-                    updatePhrasesTable(currentPage); // Обновление таблицы с фразами
+                    $('#inputAnswer').focus(); // Установка фокуса на поле ввода
+                    updateTable(currentPage); // Обновление таблицы с фразами
                 },
                 error: function () {
                     // Обработка ошибки AJAX-запроса
@@ -201,13 +203,13 @@
                     messageContainer.empty(); // Очистка контейнера сообщений
 
                     let message = $('<div>').addClass('alert alert-danger');
-                    message.text('Error occurred while adding phrase');
+                    message.text('Error occurred while adding answer');
                     messageContainer.append(message);
                 }
             });
         });
         // Инициализация таблицы с фразами при загрузке страницы
-        updatePhrasesTable(1);
+        updateTable(1);
     });
 </script>
 </html>

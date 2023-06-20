@@ -34,11 +34,11 @@ public class PhraseController {
     @PostMapping("/remove")
     @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
-    public String removePhraseById(@RequestParam("id") Long id){
-        if (phraseService.findById(id) == null)
-            return "Ошибка: Фраза [id:"+ id +"] не найдена!";
-        phraseService.deleteById(id);
-        return "Фраза [id:"+ id +"] удалена!";
+    public String removePhraseById(@RequestParam("idPhrase") Long idPhrase){
+        if (phraseService.findById(idPhrase) == null)
+            return "Ошибка: Фраза [id:"+ idPhrase +"] не найдена!";
+        phraseService.deleteById(idPhrase);
+        return "Фраза [id:"+ idPhrase +"] удалена!";
     }
 
     @PostMapping("/add")
