@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <body>
     <div th:fragment="navbar">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -46,23 +46,17 @@
                                 <li><form th:action="@{/phrase/management}">
                                     <button type="submit" class="dropdown-item">Управление фразами</button>
                                 </form></li>
-                                <li><form th:action="@{/administration/test}">
-                                    <button type="submit" class="dropdown-item">Перечень тестов</button>
+                                <li><form th:action="@{/task/management}">
+                                    <button type="submit" class="dropdown-item">Управление задачами</button>
                                 </form></li>
-                                <li><form th:action="@{/administration/test/add}">
-                                    <button type="submit" class="dropdown-item">Добавить тест</button>
+                                <li><form th:action="@{/answer/management}">
+                                    <button type="submit" class="dropdown-item">Управление ответами</button>
                                 </form></li>
-                                <li><form th:action="@{/administration/task}">
-                                    <button type="submit" class="dropdown-item">Перечень задач</button>
+                                <li><form th:action="@{/test/management}">
+                                    <button type="submit" class="dropdown-item">Управление тестами</button>
                                 </form></li>
-                                <li><form th:action="@{/administration/task/add}">
-                                    <button type="submit" class="dropdown-item">Добавить задачу</button>
-                                </form></li>
-                                <li><form th:action="@{/administration/answer}">
-                                    <button type="submit" class="dropdown-item">Перечень ответов</button>
-                                </form></li>
-                                <li><form th:action="@{/administration/answer/add}">
-                                    <button type="submit" class="dropdown-item">Добавить ответ</button>
+                                <li><form th:action="@{/trening/management}">
+                                    <button type="submit" class="dropdown-item">Управление тренингами</button>
                                 </form></li>
                             </ul>
                         </li>
@@ -137,7 +131,7 @@
                         $('#spanText').val("Fail");
                     }
                 })
-            };
+            }
             document.addEventListener("DOMContentLoaded",() => {
                 document.documentElement.classList.add("h-100");
                 document.body.classList.add("d-flex", "flex-column", "h-100");
