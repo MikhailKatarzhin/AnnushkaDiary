@@ -31,7 +31,7 @@ public class TrainingController {
         Training training = trainingService.findById(idTraining);
         if (training != null) {
             modelMap.addAttribute("currentTrainingId", training.getId());
-            modelMap.addAttribute("title", training.getDescription());
+            modelMap.addAttribute("title", training.getTitle());
             modelMap.addAttribute("description", training.getDescription());
             return "administration/training/training_view";
         }

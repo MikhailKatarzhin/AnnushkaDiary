@@ -35,7 +35,7 @@
         <hr>
         <h2>Добавление Тренинга</h2>
         <div id="messageContainer"></div>
-        <form id="addЕrainingForm" th:action="@{/training/add}" method="post">
+        <form id="addTrainingForm" th:action="@{/training/add}" method="post">
             <div class="form-floating">
                 <input type="text" class="form-control" maxlength="150"
                        id="inputTrainingTitle" name="inputTrainingTitle" placeholder="Введите название нового тренинга">
@@ -86,7 +86,7 @@
                     let row = '<tr>' +
                         '<td>' + training.id + '</td>' +
                         '<td>' + training.title + '</td>' +
-                        '<td><a href="/training/edit?idЕraining=' + training.id + '" class="btn btn-info btn-sm">Редактирование</a></td>' +
+                        '<td><a href="/training/edit?idTraining=' + training.id + '" class="btn btn-info btn-sm">Редактирование</a></td>' +
                         '</tr>';
 
                     $('#trainingTable tbody').append(row);
@@ -159,7 +159,7 @@
     }
 
     $(document).ready(function () {
-        $('#addЕrainingForm').submit(function (event) {
+        $('#addTrainingForm').submit(function (event) {
             event.preventDefault();
             let form = $(this);
             $.ajax({
@@ -181,7 +181,7 @@
                     messageContainer.append(message);
 
                     form.trigger('reset'); // Сброс формы
-                    $('#inputЕraining').focus(); // Установка фокуса на поле ввода
+                    $('#inputTraining').focus(); // Установка фокуса на поле ввода
                     updateTable(currentPage); // Обновление таблицы с фразами
                 },
                 error: function () {

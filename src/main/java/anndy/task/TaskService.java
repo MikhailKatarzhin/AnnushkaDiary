@@ -3,6 +3,7 @@ package anndy.task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 @Service
@@ -84,5 +85,50 @@ public class TaskService implements ITaskService {
     @Override
     public Long pageCount() {
         return pageCount(10);
+    }
+
+    @Override
+    public ArrayList<Task> taskSetByNumberPageListAndRowOnPageAndTrainingId(long numberPageList, long rowOnPage, long trainingId) {
+        long offset = (numberPageList - 1) * rowOnPage;
+        return taskRepository.getTasksByLimitOffsetAndTrainingId(trainingId, rowOnPage, offset);
+    }
+
+    @Override
+    public ArrayList<Task> taskSetByNumberPageListAndTrainingId(long numberPageList, long trainingId) {
+        return taskSetByNumberPageListAndRowOnPageAndTrainingId(numberPageList, 10L, trainingId);
+    }
+
+    @Override
+    public Long pageCountByTrainingId(long rowOnPage, long trainingId) {
+        long count = taskRepository.countTaskByTrainingId(trainingId);
+        long nPage = count / rowOnPage + (count % rowOnPage == 0 ? 0 : 1);
+        return nPage == 0 ? nPage + 1 : nPage;
+    }
+
+    @Override
+    public Long pageCountByTrainingId(long trainingId) {
+        return pageCountByTrainingId(10L, trainingId);
+    }
+
+    @Override
+    public Set<Task> taskSetByNumberPageListAndRowOnPageAndNotTrainingId(long numberPageList, long rowOnPage, long trainingId) {
+        return taskRepository.getTasksByLimitOffsetAndNotTrainingId(rowOnPage, (numberPageList - 1) * rowOnPage, trainingId);
+    }
+
+    @Override
+    public Set<Task> taskSetByNumberPageListAndNotTrainingId(long numberPageList, long trainingId) {
+        return taskSetByNumberPageListAndRowOnPageAndNotTrainingId(numberPageList, 10L , trainingId);
+    }
+
+    @Override
+    public Long pageCountByNotTrainingId(long rowOnPage, long trainingId) {
+        long count = taskRepository.countTaskByNotTrainingId(trainingId);
+        long nPage = count / rowOnPage + (count % rowOnPage == 0 ? 0 : 1);
+        return nPage == 0 ? nPage + 1 : nPage;
+    }
+
+    @Override
+    public Long pageCountByNotTrainingId(long trainingId) {
+        return pageCountByNotTrainingId(10L, trainingId);
     }
 }

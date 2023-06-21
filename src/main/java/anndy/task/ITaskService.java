@@ -2,6 +2,7 @@ package anndy.task;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public interface ITaskService {
@@ -28,4 +29,36 @@ public interface ITaskService {
     Long pageCount(long rowOnPage);
 
     Long pageCount();
+
+
+    ArrayList<Task> taskSetByNumberPageListAndRowOnPageAndTrainingId(
+            long numberPageList
+            , long rowOnPage
+            , long trainingId
+    );
+
+    ArrayList<Task> taskSetByNumberPageListAndTrainingId(
+            long numberPageList
+            , long trainingId
+    );
+
+    Long pageCountByTrainingId(long rowOnPage, long trainingId);
+
+    Long pageCountByTrainingId(long trainingId);
+
+
+    Set<Task> taskSetByNumberPageListAndRowOnPageAndNotTrainingId(
+            long numberPageList
+            , long rowOnPage
+            , long trainingId
+    );
+
+    Set<Task> taskSetByNumberPageListAndNotTrainingId(
+            long numberPageList
+            , long trainingId
+    );
+
+    Long pageCountByNotTrainingId(long rowOnPage, long trainingId);
+
+    Long pageCountByNotTrainingId(long trainingId);
 }
