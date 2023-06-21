@@ -11,7 +11,7 @@
 <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
 <main>
 <div>
-    <form th:action="@{/profile/change_email}" method="post" class="m-auto col-3 text-center">
+    <form th:action="@{/templates/user/profile/change_email}" method="post" class="m-auto col-3 text-center">
         <h1 class="h3 mb-3 fw-normal">Изменить ваш электронный адрес</h1>
 
         <h5 th:text="'Установленный электронный адрес: '+${currentEmail}"></h5>

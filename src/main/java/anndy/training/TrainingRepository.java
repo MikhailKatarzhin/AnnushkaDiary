@@ -46,4 +46,10 @@ public interface TrainingRepository extends JpaRepository<Training, Long> {
             nativeQuery = true
     )
     Training getTrainingByTitleEquals(String title);
+
+    @Query(
+            value = "SELECT COUNT(*) FROM \"Training_Task\" WHERE training_id = ?",
+            nativeQuery = true
+    )
+    Long countTasksByTrainingId(long trainingId);
 }

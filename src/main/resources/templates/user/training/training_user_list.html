@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление Тренингами</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
+</head>
+<body class="text-center">
+<header>
+    <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
+</header>
+<main>
+    <div>
+        <h1>Перечень всех тренингов</h1>
+        <hr>
+        <table id="trainingTable" class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Название</th>
+                <th scope="col">Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center" id="paginationContainer">
+                <!-- Здесь будут отображаться элементы пагинации -->
+            </ul>
+        </nav>
+    </div>
+</main>
+<footer th:replace="~{fragments/navigation_fragments  :: footer}"></footer>
+</body>
+<script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    let currentPage = 1;
+
+    // Функция для обновления таблицы
+    function updateTable(page) {
+        currentPage = page;
+        $.ajax({
+            url: '/training/get_records?page=' + page, // URL для получения данных с сервера
+            method: 'GET',
+            success: function (trainings) {
+                // Очищаем tbody таблицы
+                $('#trainingTable tbody').empty();
+
+                // Перебираем полученные записи и добавляем их в таблицу
+                for (let i = 0; i < trainings.length; i++) {
+                    let training = trainings[i];
+                    let row = '<tr>' +
+                        '<td>' + training.id + '</td>' +
+                        '<td>' + training.title + '</td>' +
+                        '<td><a href="/training/view?idTraining=' + training.id + '" class="btn btn-info btn-sm">Информация о тренинге</a></td>' +
+                        '</tr>';
+
+                    $('#trainingTable tbody').append(row);
+                }
+
+                // Обновляем пагинацию
+                loadPageCount(page);
+            },
+            error: function (xhr, status, error) {
+                // Обработка ошибок при выполнении AJAX запроса
+                console.log('Ошибка при получении данных:', error);
+            }
+        });
+    }
+
+
+    // Функция для обновления пагинации
+    function updatePagination(totalPages, currentPage) {
+        let paginationContainer = $('#paginationContainer');
+        paginationContainer.empty();
+        if (totalPages <= 1) {
+            return; // Нет необходимости отображать пагинацию
+        }
+
+        if (currentPage > 1) {
+            let previousPage = currentPage - 1;
+            let previousButton = $('<li>').addClass('page-item')
+                .append($('<a>').addClass('page-link').attr('href', '#').text('«').click(function () {
+                    updateTable(previousPage);
+                }));
+
+            paginationContainer.append(previousButton);
+        }
+
+        for (let i = 0; i < totalPages; i++) {
+            let pageButton = $('<li>').addClass('page-item')
+                .append($('<a>').addClass('page-link').attr('href', '#').text(i+1).click(function () {
+                    updateTable(i+1);
+                }));
+
+            if (i+1 === currentPage) {
+                pageButton.addClass('active');
+                pageButton.prop('disabled', true);
+            }
+
+            paginationContainer.append(pageButton);
+        }
+        if (currentPage < totalPages) {
+            let nextPage = currentPage + 1;
+            let nextButton = $('<li>').addClass('page-item')
+                .append($('<a>').addClass('page-link').attr('href', '#').text('»').click(function () {
+                    updateTable(nextPage);
+                }));
+
+            paginationContainer.append(nextButton);
+        }
+    }
+
+    function loadPageCount(currentPage) {
+        $.ajax({
+            url: '/training/get_page_count',
+            type: 'GET',
+            success: function(data) {
+                updatePagination(data, currentPage);
+            },
+            error: function(xhr, status, error) {
+                console.log('Ошибка при загрузке количества страниц: ' + error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // Инициализация таблицы с фразами при загрузке страницы
+        updateTable(1);
+    });
+</script>
+</html>

@@ -1,7 +1,6 @@
 package anndy.profile;
 
 import anndy.model.User;
-import anndy.phrase.IPhraseService;
 import anndy.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,12 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class ProfilesController {
     private final UserService userService;
-    private final IPhraseService phraseService;
 
     @Autowired
-    public ProfilesController(UserService userService, IPhraseService phraseService) {
+    public ProfilesController(UserService userService) {
         this.userService = userService;
-        this.phraseService = phraseService;
     }
 
     @GetMapping
@@ -34,13 +31,13 @@ public class ProfilesController {
         if (user == null)
             return myProfile();
         model.addAttribute("user", user);
-        return "profile/profile";
+        return "user/profile/profile";
     }
 
     @GetMapping("/change_email")
     public String changeEmail(ModelMap model) {
         model.addAttribute("currentEmail", userService.getRemoteUserEmail());
-        return "profile/change_email";
+        return "user/profile/change_email";
     }
 
     @PostMapping("/change_email")
@@ -49,11 +46,11 @@ public class ProfilesController {
                 || !email.matches("[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")) {
             model.addAttribute("currentEmail", userService.getRemoteUserEmail());
             model.addAttribute("emailInputError", "Email уже существует или введён неверно");
-            return "profile/change_email";
+            return "user/profile/change_email";
         }
         if (userService.emailExists(email)) {
             model.addAttribute("emailExistsError", "Email already exists");
-            return "profile/change_email";
+            return "user/profile/change_email";
         }
         userService.saveEmail(email);
         return "redirect:/profile";
@@ -61,7 +58,7 @@ public class ProfilesController {
 
     @GetMapping("/change_password")
     public String changePassword() {
-        return "profile/change_password";
+        return "user/profile/change_password";
     }
 
     @PostMapping("/change_password")
@@ -73,16 +70,16 @@ public class ProfilesController {
     ) {
         if (!userService.checkRemoteUserPassword(currentPassword)) {
             model.addAttribute("InvalidPasswordError", "Установленный пароль неверено введен");
-            return "profile/change_password";
+            return "user/profile/change_password";
         }
         if (newPassword.isBlank() || !newPassword.matches("[A-Za-z0-9#$&/%-._]{8,60}$")) {
             model.addAttribute("passwordIsBlankError", "Новый пароль введен некорректно");
-            return "profile/change_password";
+            return "user/profile/change_password";
         }
         if (!confirmPassword.equals(newPassword)) {
             model.addAttribute("currentPassword", currentPassword);
             model.addAttribute("passwordIsDifferentError", "Пароли различаются");
-            return "profile/change_password";
+            return "user/profile/change_password";
         }
         userService.savePassword(newPassword);
         return "redirect:/profile";

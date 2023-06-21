@@ -33,4 +33,6 @@ public interface ITrainingService {
     Long pageCount(long rowOnPage);
 
     Long pageCount();
+
+    Long countTasksByTrainingId(long trainingId);
 }

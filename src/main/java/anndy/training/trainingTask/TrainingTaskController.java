@@ -58,7 +58,6 @@ public class TrainingTaskController {
     }
 
     @GetMapping("/get_records")
-    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
     public List<Task> getTasks(
             @RequestParam(value = "page", defaultValue = "1") int page
@@ -68,14 +67,12 @@ public class TrainingTaskController {
     }
 
     @GetMapping("/get_page_count")
-    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
     public long getPageCount(@RequestParam("trainingId") long trainingId) {
         return taskService.pageCountByNotTrainingId(trainingId);
     }
 
     @GetMapping("/get_records_selected")
-    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
     public List<Task> getTasksSelected(
             @RequestParam(value = "page", defaultValue = "1") int page
@@ -85,7 +82,6 @@ public class TrainingTaskController {
     }
 
     @GetMapping("/get_page_count_selected")
-    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
     public long getPageCountSelected(@RequestParam("trainingId") long trainingId) {
         return taskService.pageCountByTrainingId(trainingId);

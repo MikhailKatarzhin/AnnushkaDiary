@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница Тренинга</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+            text-align: center;
+            line-height: 50px;
+        }
+        .wrapper {
+            display: flex;
+            height: 100%;
+        }
+
+        .content {
+            flex: 8;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css" />
+</head>
+<body class="text-center">
+<header>
+    <div th:insert="~{fragments/navigation_fragments  :: navbar}"></div>
+</header>
+<main>
+    <input type="hidden" id="trainingId" th:value="${currentTrainingId}" />
+    <div class="wrapper">
+        <table style="width: 100%" class="table">
+            <tr>
+                <td>
+                    <div class="content">
+                        <h2 th:text="'Номер тренинга - [id:'+${currentTrainingId}+']'"></h2>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="messageContainer"></div>
+                    <h2>Название тренинга</h2>
+                    <textarea disabled class="form-control" id="title" name="title" placeholder="Название тренинга"
+                              th:text="${title}"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>Описание тренинга</h2>
+                    <textarea disabled class="form-control" id="taskDescription" name="taskDescription" placeholder="Описание тренинга"
+                              th:text="${description}"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="content">
+                        <h2 th:text="'Всего задач в тренинге:['+${nTasks}+']'"></h2>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a class="btn btn-success btn-lg" th:href="@{/training/solve?idTraining=__${currentTrainingId}__}">Приступить к выполнению</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments/navigation_fragments  :: footer}"></footer>
+</body>
+<script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js"></script>
+</html>

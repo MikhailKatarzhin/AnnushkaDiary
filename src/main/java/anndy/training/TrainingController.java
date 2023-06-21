@@ -18,7 +18,6 @@ public class TrainingController {
         this.trainingService = trainingService;
     }
 
-
     @GetMapping("/management")
     @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     public String managementPage(){
@@ -82,16 +81,40 @@ public class TrainingController {
     }
 
     @GetMapping("/get_records")
-    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
     public List<Training> getTrainings(@RequestParam(value = "page", defaultValue = "1") int page) {
         return new ArrayList<>(trainingService.trainingSetByNumberPageListAndRowOnPage(page));
     }
 
     @GetMapping("/get_page_count")
-    @PreAuthorize("hasAuthority('АДМИНИСТРАТОР')")
     @ResponseBody
     public long getPageCount() {
         return trainingService.pageCount();
+    }
+
+
+    @GetMapping("/list")
+    public String usersTrainingList(){
+        return "user/training/training_user_list";
+    }
+
+    @GetMapping("/view")
+    public String usersTrainingView(@RequestParam(value = "idTraining") long trainingId, ModelMap modelMap){
+        Training training = trainingService.findById(trainingId);
+        modelMap.addAttribute("currentTrainingId", training.getId());
+        modelMap.addAttribute("title", training.getTitle());
+        modelMap.addAttribute("description", training.getDescription());
+        modelMap.addAttribute("nTasks", trainingService.countTasksByTrainingId(trainingId));
+        return "user/training/training_user_view";
+    }
+
+    @GetMapping("/solve")
+    public String usersTrainingSolve(@RequestParam(value = "idTraining") long trainingId, ModelMap modelMap){
+        Training training = trainingService.findById(trainingId);
+        modelMap.addAttribute("currentTrainingId", training.getId());
+        modelMap.addAttribute("title", training.getTitle());
+        modelMap.addAttribute("description", training.getDescription());
+        modelMap.addAttribute("nTasks", trainingService.countTasksByTrainingId(trainingId));
+        return "user/training/training_solve";
     }
 }

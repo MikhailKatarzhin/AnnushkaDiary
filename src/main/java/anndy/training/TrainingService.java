@@ -97,4 +97,9 @@ public class TrainingService implements ITrainingService {
     public Long pageCount() {
         return pageCount(10);
     }
+
+    @Override
+    public Long countTasksByTrainingId(long trainingId){
+        return trainingRepository.countTasksByTrainingId(trainingId);
+    }
 }
