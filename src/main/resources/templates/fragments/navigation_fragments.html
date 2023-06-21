@@ -41,7 +41,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                                 <li><form th:action="@{/administration/users}">
-                                    <button type="submit" class="dropdown-item">Перечень пользователей</button>
+                                    <button disabled type="submit" class="dropdown-item">Перечень пользователей</button>
                                 </form></li>
                                 <li><form th:action="@{/phrase/management}">
                                     <button type="submit" class="dropdown-item">Управление фразами</button>
@@ -53,9 +53,9 @@
                                     <button type="submit" class="dropdown-item">Управление ответами</button>
                                 </form></li>
                                 <li><form th:action="@{/test/management}">
-                                    <button type="submit" class="dropdown-item">Управление тестами</button>
+                                    <button disabled type="submit" class="dropdown-item">Управление тестами</button>
                                 </form></li>
-                                <li><form th:action="@{/trening/management}">
+                                <li><form th:action="@{/training/management}">
                                     <button type="submit" class="dropdown-item">Управление тренингами</button>
                                 </form></li>
                             </ul>
@@ -66,13 +66,13 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                                 <li><form th:action="@{/consumer/tests}">
-                                    <button type="submit" class="dropdown-item">Тест-опросники</button>
+                                    <button disabled type="submit" class="dropdown-item">Тест-опросники</button>
                                 </form></li>
                                 <li><form th:action="@{/consumer/trenings}">
-                                    <button type="submit" class="dropdown-item">Тренинги</button>
+                                    <button disabled type="submit" class="dropdown-item">Тренинги</button>
                                 </form></li>
                                 <li><form th:action="@{/consumer/results}">
-                                    <button type="submit" class="dropdown-item">Ваши результаты</button>
+                                    <button disabled type="submit" class="dropdown-item">Ваши результаты</button>
                                 </form></li>
                             </ul>
                         </li>
